@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-portfolio-app
+  labels:
+    app: devops-portfolio-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-portfolio-app
+  template:
+    metadata:
+      labels:
+        app: devops-portfolio-app
+      annotations:
+        # These annotations are what let a kube-prometheus-stack / Prometheus
+        # Operator pick this pod up for scraping without extra config.
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: app
+          # Replace with your ECR image URI, e.g.
+          # <account_id>.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
+          image: <ECR_REPO_URL>:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
