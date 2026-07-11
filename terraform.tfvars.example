@@ -1,9 +1,0 @@
-# Copy this file to terraform.tfvars and fill in real values.
-# terraform.tfvars is gitignored — never commit real credentials.
-
-aws_region   = "ap-south-1"
-project_name = "devops-portfolio"
-environment  = "dev"
-
-db_username = "appadmin"
-db_password = "ChangeMe-Use-A-Real-Secret-Here!"
