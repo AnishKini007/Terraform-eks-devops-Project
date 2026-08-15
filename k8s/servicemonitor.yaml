@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: devops-portfolio-app
+  labels:
+    # Required so the kube-prometheus-stack Prometheus instance (which only
+    # watches ServiceMonitors matching release=monitoring) picks this up.
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: devops-portfolio-app
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
