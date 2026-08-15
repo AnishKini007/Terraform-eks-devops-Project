@@ -1,0 +1,105 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "devops-portfolio-app",
+    "title": "DevOps Portfolio App",
+    "tags": ["devops-portfolio"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 0,
+    "refresh": "10s",
+    "time": { "from": "now-30m", "to": "now" },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request rate by endpoint",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 12, "x": 0, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "expr": "sum(rate(app_requests_total[5m])) by (exported_endpoint)",
+            "legendFormat": "{{exported_endpoint}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": { "unit": "reqps" },
+          "overrides": []
+        }
+      },
+      {
+        "id": 2,
+        "title": "Total requests",
+        "type": "stat",
+        "gridPos": { "h": 9, "w": 6, "x": 12, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "expr": "sum(app_requests_total)",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": { "unit": "none" },
+          "overrides": []
+        }
+      },
+      {
+        "id": 3,
+        "title": "Running pods",
+        "type": "stat",
+        "gridPos": { "h": 9, "w": 6, "x": 18, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "expr": "count(kube_pod_status_phase{namespace=\"default\", pod=~\"devops-portfolio-app.*\", phase=\"Running\"})",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": { "unit": "none" },
+          "overrides": []
+        }
+      },
+      {
+        "id": 4,
+        "title": "Pod memory usage (bytes)",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 12, "x": 0, "y": 9 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "expr": "sum(container_memory_working_set_bytes{namespace=\"default\", pod=~\"devops-portfolio-app.*\", container=\"app\"}) by (pod)",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": { "unit": "bytes" },
+          "overrides": []
+        }
+      },
+      {
+        "id": 5,
+        "title": "Pod CPU usage (cores)",
+        "type": "timeseries",
+        "gridPos": { "h": 9, "w": 12, "x": 12, "y": 9 },
+        "datasource": { "type": "prometheus", "uid": "prometheus" },
+        "targets": [
+          {
+            "datasource": { "type": "prometheus", "uid": "prometheus" },
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod=~\"devops-portfolio-app.*\", container=\"app\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}}",
+            "refId": "A"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}
