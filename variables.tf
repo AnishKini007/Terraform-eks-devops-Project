@@ -31,7 +31,7 @@ variable "azs" {
 variable "cluster_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  default     = "1.29"
+  default     = "1.33"
 }
 
 variable "node_instance_types" {
@@ -64,7 +64,7 @@ variable "db_engine" {
 
 variable "db_engine_version" {
   type    = string
-  default = "16.3"
+  default = "15.18"
 }
 
 variable "db_instance_class" {
