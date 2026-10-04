@@ -57,12 +57,12 @@ chars, correct account ID via `aws sts get-caller-identity`).
 ```powershell
 $token = aws ecr get-login-password --region ap-south-1
 [System.IO.File]::WriteAllText("$env:TEMP\ecr_token.txt", $token)
-cmd /c "type `"$env:TEMP\ecr_token.txt`" | docker login --username AWS --password-stdin 975050192962.dkr.ecr.ap-south-1.amazonaws.com"
+cmd /c "type `"$env:TEMP\ecr_token.txt`" | docker login --username AWS --password-stdin <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com"
 ```
 
 Also: the README's `<account_id>` placeholder can't be typed literally in
 PowerShell — `<` is a reserved redirection operator there. Replaced with the real
-account ID (`975050192962`, from `aws sts get-caller-identity`).
+account ID (`<AWS_ACCOUNT_ID>`, from `aws sts get-caller-identity`).
 
 ## 4. `docker build` failed — OneDrive Files-On-Demand vs. Docker Desktop WSL2
 
@@ -93,8 +93,8 @@ folder.
 ## 5. Tagged and pushed the image
 
 ```bash
-docker tag devops-portfolio-app:latest 975050192962.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
-docker push 975050192962.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
+docker tag devops-portfolio-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
+docker push <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
 ```
 
 (ECR repo `devops-portfolio-app` already existed in the account.)
@@ -105,7 +105,7 @@ Updated `k8s/deployment.yaml` to point at the real image instead of the
 `<ECR_REPO_URL>` placeholder:
 
 ```
-image: 975050192962.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
+image: <AWS_ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/devops-portfolio-app:latest
 ```
 
 ```bash
